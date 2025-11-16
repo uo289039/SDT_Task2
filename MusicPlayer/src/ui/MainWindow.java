@@ -24,6 +24,9 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.border.LineBorder;
+import javax.swing.JList;
+import javax.swing.JButton;
 
 public class MainWindow extends JFrame {
 
@@ -48,7 +51,21 @@ public class MainWindow extends JFrame {
 	private JPanel panelPlay;
 	private JLabel lblLibrary;
 	private JLabel lblPlayList;
-	private JScrollPane scrollPane;
+	private JScrollPane scrollPaneLibrary;
+	private JList listLibrary;
+	private JPanel panelBtnLIbrary;
+	private JButton btnAdd;
+	private JButton btnDelete;
+	private JButton btnClear;
+	private JScrollPane scrollPaneLIst;
+	private JList listMusic;
+	private JPanel panelBtnLIst;
+	private JButton btnPrevious;
+	private JButton btnPlay;
+	private JButton btnPause;
+	private JButton btnNext;
+	private JButton btnDel;
+	private JButton btnClearList;
 	
 
 	/**
@@ -67,7 +84,7 @@ public class MainWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.add(getPanelNorth(), BorderLayout.NORTH);
-		contentPane.add(getPanelCenter(), BorderLayout.SOUTH);
+		contentPane.add(getPanelCenter(), BorderLayout.CENTER);
 
 	}
 
@@ -205,7 +222,8 @@ public class MainWindow extends JFrame {
 			panelLibrary.setBackground(Color.BLACK);
 			panelLibrary.setLayout(new BorderLayout(0, 0));
 			panelLibrary.add(getLblLibrary(), BorderLayout.NORTH);
-			panelLibrary.add(getScrollPane(), BorderLayout.CENTER);
+			panelLibrary.add(getScrollPaneLibrary(), BorderLayout.CENTER);
+			panelLibrary.add(getPanelBtnLIbrary(), BorderLayout.SOUTH);
 		}
 		return panelLibrary;
 	}
@@ -215,6 +233,8 @@ public class MainWindow extends JFrame {
 			panelPlay.setBackground(Color.BLACK);
 			panelPlay.setLayout(new BorderLayout(0, 0));
 			panelPlay.add(getLblPlayList(), BorderLayout.NORTH);
+			panelPlay.add(getScrollPaneLIst(), BorderLayout.CENTER);
+			panelPlay.add(getPanelBtnLIst(), BorderLayout.SOUTH);
 		}
 		return panelPlay;
 	}
@@ -234,10 +254,115 @@ public class MainWindow extends JFrame {
 		}
 		return lblPlayList;
 	}
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
+	private JScrollPane getScrollPaneLibrary() {
+		if (scrollPaneLibrary == null) {
+			scrollPaneLibrary = new JScrollPane();
+			scrollPaneLibrary.setBackground(Color.BLACK);
+			scrollPaneLibrary.setBorder(new LineBorder(new Color(255, 0, 0), 5, true));
+			scrollPaneLibrary.setViewportView(getListLibrary());
 		}
-		return scrollPane;
+		return scrollPaneLibrary;
+	}
+	private JList getListLibrary() {
+		if (listLibrary == null) {
+			listLibrary = new JList();
+			listLibrary.setBackground(Color.BLACK);
+			listLibrary.setForeground(Color.WHITE);
+		}
+		return listLibrary;
+	}
+	private JPanel getPanelBtnLIbrary() {
+		if (panelBtnLIbrary == null) {
+			panelBtnLIbrary = new JPanel();
+			panelBtnLIbrary.setLayout(new GridLayout(1, 3, 0, 0));
+			panelBtnLIbrary.add(getBtnAdd());
+			panelBtnLIbrary.add(getBtnDelete());
+			panelBtnLIbrary.add(getBtnClear());
+		}
+		return panelBtnLIbrary;
+	}
+	private JButton getBtnAdd() {
+		if (btnAdd == null) {
+			btnAdd = new JButton("Add to PlayList");
+		}
+		return btnAdd;
+	}
+	private JButton getBtnDelete() {
+		if (btnDelete == null) {
+			btnDelete = new JButton("Delete");
+		}
+		return btnDelete;
+	}
+	private JButton getBtnClear() {
+		if (btnClear == null) {
+			btnClear = new JButton("Clear");
+		}
+		return btnClear;
+	}
+	private JScrollPane getScrollPaneLIst() {
+		if (scrollPaneLIst == null) {
+			scrollPaneLIst = new JScrollPane();
+			scrollPaneLIst.setBorder(new LineBorder(Color.RED, 5, true));
+			scrollPaneLIst.setBackground(Color.BLACK);
+			scrollPaneLIst.setViewportView(getListMusic());
+		}
+		return scrollPaneLIst;
+	}
+	private JList getListMusic() {
+		if (listMusic == null) {
+			listMusic = new JList();
+			listMusic.setForeground(Color.WHITE);
+			listMusic.setBackground(Color.BLACK);
+		}
+		return listMusic;
+	}
+	private JPanel getPanelBtnLIst() {
+		if (panelBtnLIst == null) {
+			panelBtnLIst = new JPanel();
+			panelBtnLIst.setLayout(new GridLayout(1, 6, 0, 0));
+			panelBtnLIst.add(getBtnPrevious());
+			panelBtnLIst.add(getBtnPlay());
+			panelBtnLIst.add(getBtnPause());
+			panelBtnLIst.add(getBtnNext());
+			panelBtnLIst.add(getBtnDel());
+			panelBtnLIst.add(getBtnClearList());
+		}
+		return panelBtnLIst;
+	}
+	private JButton getBtnPrevious() {
+		if (btnPrevious == null) {
+			btnPrevious = new JButton("◄◄");
+		}
+		return btnPrevious;
+	}
+	private JButton getBtnPlay() {
+		if (btnPlay == null) {
+			btnPlay = new JButton("►");
+		}
+		return btnPlay;
+	}
+	private JButton getBtnPause() {
+		if (btnPause == null) {
+			btnPause = new JButton("■");
+		}
+		return btnPause;
+	}
+	private JButton getBtnNext() {
+		if (btnNext == null) {
+			btnNext = new JButton("►►");
+		}
+		return btnNext;
+	}
+	private JButton getBtnDel() {
+		if (btnDel == null) {
+			btnDel = new JButton("Delete");
+		}
+		return btnDel;
+	}
+	private JButton getBtnClearList() {
+		if (btnClearList == null) {
+			btnClearList = new JButton("Clear");
+		}
+		return btnClearList;
 	}
 }
