@@ -507,10 +507,30 @@ public class MainWindow extends JFrame {
 	private JButton getBtnPrevious() {
 		if (btnPrevious == null) {
 			btnPrevious = new JButton("◄◄");
+			btnPrevious.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					previousSong();
+				}
+			});
 			btnPrevious.setEnabled(false);
 		}
 		return btnPrevious;
 	}
+	protected void previousSong() {
+		// TODO Auto-generated method stub
+		int index=listMusic.getSelectedIndex();
+		--index;
+		if(index<0)
+			index=modeloListPlay.getSize()-1;
+		
+		listMusic.setSelectedIndex(index);
+		mPlayer.play(modeloListPlay.get(index).getMyFile());
+			
+		
+		
+		
+	}
+
 	private JButton getBtnPlay() {
 		if (btnPlay == null) {
 			btnPlay = new JButton("►");
@@ -533,10 +553,26 @@ public class MainWindow extends JFrame {
 	private JButton getBtnNext() {
 		if (btnNext == null) {
 			btnNext = new JButton("►►");
+			btnNext.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					nextSong();
+				}
+			});
 			btnNext.setEnabled(false);
 		}
 		return btnNext;
 	}
+	protected void nextSong() {
+		// TODO Auto-generated method stub
+		int index=listMusic.getSelectedIndex();
+		index++;
+		if(index>=modeloListPlay.getSize())
+			index=0;
+		
+		listMusic.setSelectedIndex(index);
+		mPlayer.play(modeloListPlay.get(index).getMyFile());
+	}
+
 	private JButton getBtnDel() {
 		if (btnDel == null) {
 			btnDel = new JButton("Delete");
