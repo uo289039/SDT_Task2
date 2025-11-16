@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSeparator;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
@@ -77,6 +78,7 @@ public class MainWindow extends JFrame {
 	private JFileChooser selector;
 	private DefaultListModel<MyFile> modeloListLibrary;
 	private DefaultListModel<MyFile> modeloListPlay;
+	private MyFile song;
 
 	/**
 	 * Create the frame.
@@ -164,6 +166,13 @@ public class MainWindow extends JFrame {
 	private JMenuItem getMntmExit() {
 		if (mntmExit == null) {
 			mntmExit = new JMenuItem("Exit");
+			mntmExit.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					int response=JOptionPane.showConfirmDialog(null, "Do you want to close the application?");
+					if(response==JOptionPane.YES_OPTION)
+						System.exit(0);
+				}
+			});
 		}
 		return mntmExit;
 	}
@@ -176,9 +185,35 @@ public class MainWindow extends JFrame {
 	private JMenuItem getMntmPlay() {
 		if (mntmPlay == null) {
 			mntmPlay = new JMenuItem("Play Music");
+			mntmPlay.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					playMusic();
+				}
+
+				
+			});
 		}
 		return mntmPlay;
 	}
+	
+	private void playMusic() {
+		// TODO Auto-generated method stub
+		MyFile file=listMusic.getSelectedValue();
+		if(file!=null) {
+			mPlayer.play(file.getMyFile());
+			song=file;
+		}
+		else {
+			file=modeloListPlay.get(0);
+			mPlayer.play(file.getMyFile());
+			song=file;
+		}
+		if(listMusic.getSelectedIndex()<0)
+			listMusic.setSelectedIndex(0);
+		else
+			listMusic.setSelectedIndex(listMusic.getSelectedIndex());
+	}
+	
 	private JPanel getPanelNorth() {
 		if (panelNorth == null) {
 			panelNorth = new JPanel();
@@ -328,6 +363,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
 			btnAdd = new JButton("Add to PlayList");
+			btnAdd.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
 		}
 		return btnAdd;
 	}
@@ -383,6 +423,11 @@ public class MainWindow extends JFrame {
 	private JButton getBtnPlay() {
 		if (btnPlay == null) {
 			btnPlay = new JButton("►");
+			btnPlay.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					playMusic();
+				}
+			});
 		}
 		return btnPlay;
 	}
