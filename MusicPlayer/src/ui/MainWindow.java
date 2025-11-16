@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import player.MusicPlayer;
+import player.MyFile;
 
 import java.awt.Toolkit;
 import java.awt.Color;
@@ -17,16 +18,23 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import java.awt.GridLayout;
 import javax.swing.JLabel;
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JSlider;
 import java.awt.Font;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.event.ChangeEvent;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
 import javax.swing.JList;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.awt.event.ActionEvent;
 
 public class MainWindow extends JFrame {
 
@@ -52,13 +60,13 @@ public class MainWindow extends JFrame {
 	private JLabel lblLibrary;
 	private JLabel lblPlayList;
 	private JScrollPane scrollPaneLibrary;
-	private JList listLibrary;
+	private JList<MyFile> listLibrary;
 	private JPanel panelBtnLIbrary;
 	private JButton btnAdd;
 	private JButton btnDelete;
 	private JButton btnClear;
 	private JScrollPane scrollPaneLIst;
-	private JList listMusic;
+	private JList<MyFile> listMusic;
 	private JPanel panelBtnLIst;
 	private JButton btnPrevious;
 	private JButton btnPlay;
@@ -66,7 +74,9 @@ public class MainWindow extends JFrame {
 	private JButton btnNext;
 	private JButton btnDel;
 	private JButton btnClearList;
-	
+	private JFileChooser selector;
+	private DefaultListModel<MyFile> modeloListLibrary;
+	private DefaultListModel<MyFile> modeloListPlay;
 
 	/**
 	 * Create the frame.
@@ -115,9 +125,42 @@ public class MainWindow extends JFrame {
 	private JMenuItem getMntmOpen() {
 		if (mntmOpen == null) {
 			mntmOpen = new JMenuItem("Open");
+			mntmOpen.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					openFiles();
+				}
+
+				
+			});
 		}
 		return mntmOpen;
 	}
+	
+	private void openFiles() {
+		// TODO Auto-generated method stub
+		int response=getSelector().showOpenDialog(null);
+		if(response==JFileChooser.APPROVE_OPTION) {
+			for(int i=0;i<getSelector().getSelectedFiles().length;i++) {
+				MyFile mFile=new MyFile(getSelector().getSelectedFiles()[i]);
+				if(!modeloListLibrary.contains(mFile))
+					modeloListLibrary.add(i, mFile);
+			}
+		}
+		
+	}
+	
+	private JFileChooser getSelector() {
+		// TODO Auto-generated method stub
+		if(selector==null) {
+			selector= new JFileChooser();
+			selector.setMultiSelectionEnabled(true);
+			selector.setFileFilter(new FileNameExtensionFilter("Archivos mp3", "mp3"));
+			String dir=System.getProperty("user.home")+"/Music";
+			selector.setCurrentDirectory(new File(dir));
+		}
+		return selector;
+	}
+
 	private JMenuItem getMntmExit() {
 		if (mntmExit == null) {
 			mntmExit = new JMenuItem("Exit");
@@ -263,9 +306,10 @@ public class MainWindow extends JFrame {
 		}
 		return scrollPaneLibrary;
 	}
-	private JList getListLibrary() {
+	private JList<MyFile> getListLibrary() {
 		if (listLibrary == null) {
-			listLibrary = new JList();
+			modeloListLibrary= new DefaultListModel<MyFile>();
+			listLibrary = new JList<MyFile>(modeloListLibrary);
 			listLibrary.setBackground(Color.BLACK);
 			listLibrary.setForeground(Color.WHITE);
 		}
@@ -308,9 +352,10 @@ public class MainWindow extends JFrame {
 		}
 		return scrollPaneLIst;
 	}
-	private JList getListMusic() {
+	private JList<MyFile> getListMusic() {
 		if (listMusic == null) {
-			listMusic = new JList();
+			modeloListPlay=new DefaultListModel<MyFile>();
+			listMusic = new JList<MyFile>(modeloListPlay);
 			listMusic.setForeground(Color.WHITE);
 			listMusic.setBackground(Color.BLACK);
 		}
