@@ -35,6 +35,7 @@ import javax.swing.JFileChooser;
 
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 public class MainWindow extends JFrame {
@@ -65,7 +66,7 @@ public class MainWindow extends JFrame {
 	private JPanel panelBtnLIbrary;
 	private JButton btnAdd;
 	private JButton btnDelete;
-	private JButton btnClear;
+	private JButton btnClearLibrary;
 	private JScrollPane scrollPaneLIst;
 	private JList<MyFile> listMusic;
 	private JPanel panelBtnLIst;
@@ -148,7 +149,9 @@ public class MainWindow extends JFrame {
 					modeloListLibrary.add(i, mFile);
 			}
 		}
-		
+		btnAdd.setEnabled(true);
+		btnDelete.setEnabled(true);
+		btnClearLibrary.setEnabled(true);
 	}
 	
 	private JFileChooser getSelector() {
@@ -356,33 +359,120 @@ public class MainWindow extends JFrame {
 			panelBtnLIbrary.setLayout(new GridLayout(1, 3, 0, 0));
 			panelBtnLIbrary.add(getBtnAdd());
 			panelBtnLIbrary.add(getBtnDelete());
-			panelBtnLIbrary.add(getBtnClear());
+			panelBtnLIbrary.add(getBtnClearLibrary());
 		}
 		return panelBtnLIbrary;
 	}
 	private JButton getBtnAdd() {
 		if (btnAdd == null) {
 			btnAdd = new JButton("Add to PlayList");
+			btnAdd.setEnabled(false);
 			btnAdd.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					addPlayList();
 				}
+
+				
 			});
 		}
 		return btnAdd;
 	}
+	
+	private void addPlayList() {
+		List<MyFile> selected=listLibrary.getSelectedValuesList();
+		if(selected.size()>0) {
+			for(int i=0;i<selected.size();i++)
+				if(!modeloListPlay.contains(modeloListLibrary.get(i)))
+					modeloListPlay.add(i, modeloListLibrary.get(i));
+		
+			btnPlay.setEnabled(true);
+			btnPrevious.setEnabled(true);
+			btnNext.setEnabled(true);
+			btnPause.setEnabled(true);
+			btnDel.setEnabled(true);
+			btnClearList.setEnabled(true);
+		}
+		
+	}
+	
 	private JButton getBtnDelete() {
 		if (btnDelete == null) {
 			btnDelete = new JButton("Delete");
+			btnDelete.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					deleteLibraryList();
+				}
+
+				
+			});
+			btnDelete.setEnabled(false);
 		}
 		return btnDelete;
 	}
-	private JButton getBtnClear() {
-		if (btnClear == null) {
-			btnClear = new JButton("Clear");
+	
+	private void deleteLibraryList() {
+		// TODO Auto-generated method stub
+		for(int i=0; i<listLibrary.getSelectedValuesList().size();i++) {
+			
+			if(modeloListPlay.contains(listLibrary.getSelectedValuesList().get(i))){
+				
+				MyFile file=listMusic.getSelectedValue();
+				
+				if(file!=null) {
+				if(file.equals(listLibrary.getSelectedValuesList().get(i)))
+					mPlayer.stop();
+				}
+				
+				modeloListPlay.removeElement(listLibrary.getSelectedValuesList().get(i));
+				
+			}
+			modeloListLibrary.removeElement(listLibrary.getSelectedValuesList().get(i));
 		}
-		return btnClear;
+		if(modeloListLibrary.size()==0) {
+			deshabilitaBotonesPlay();
+		}
+		
+			
+		
 	}
+	
+	private JButton getBtnClearLibrary() {
+		if (btnClearLibrary == null) {
+			btnClearLibrary = new JButton("Clear");
+			btnClearLibrary.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					clearLibraryList();
+				}
+			});
+			btnClearLibrary.setEnabled(false);
+		}
+		return btnClearLibrary;
+	}
+	
+	protected void clearLibraryList() {
+		// TODO Auto-generated method stub
+			modeloListLibrary.removeAllElements();
+			clearPlay();
+			
+		
+	}
+
+	private void clearPlay() {
+		// TODO Auto-generated method stub
+		modeloListPlay.removeAllElements();
+		
+		deshabilitaBotonesPlay();
+	}
+	
+	private void deshabilitaBotonesPlay() {
+		btnPlay.setEnabled(false);
+		btnPrevious.setEnabled(false);
+		btnNext.setEnabled(false);
+		btnPause.setEnabled(false);
+		btnDel.setEnabled(false);
+		btnClearList.setEnabled(false);
+	}
+
 	private JScrollPane getScrollPaneLIst() {
 		if (scrollPaneLIst == null) {
 			scrollPaneLIst = new JScrollPane();
@@ -417,12 +507,14 @@ public class MainWindow extends JFrame {
 	private JButton getBtnPrevious() {
 		if (btnPrevious == null) {
 			btnPrevious = new JButton("◄◄");
+			btnPrevious.setEnabled(false);
 		}
 		return btnPrevious;
 	}
 	private JButton getBtnPlay() {
 		if (btnPlay == null) {
 			btnPlay = new JButton("►");
+			btnPlay.setEnabled(false);
 			btnPlay.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					playMusic();
@@ -434,24 +526,33 @@ public class MainWindow extends JFrame {
 	private JButton getBtnPause() {
 		if (btnPause == null) {
 			btnPause = new JButton("■");
+			btnPause.setEnabled(false);
 		}
 		return btnPause;
 	}
 	private JButton getBtnNext() {
 		if (btnNext == null) {
 			btnNext = new JButton("►►");
+			btnNext.setEnabled(false);
 		}
 		return btnNext;
 	}
 	private JButton getBtnDel() {
 		if (btnDel == null) {
 			btnDel = new JButton("Delete");
+			btnDel.setEnabled(false);
 		}
 		return btnDel;
 	}
 	private JButton getBtnClearList() {
 		if (btnClearList == null) {
 			btnClearList = new JButton("Clear");
+			btnClearList.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					clearPlay();
+				}
+			});
+			btnClearList.setEnabled(false);
 		}
 		return btnClearList;
 	}
