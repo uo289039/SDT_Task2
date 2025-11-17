@@ -429,13 +429,23 @@ public class MainWindow extends JFrame {
 			modeloListLibrary.removeElement(listLibrary.getSelectedValuesList().get(i));
 		}
 		if(modeloListLibrary.size()==0) {
+			
 			deshabilitaBotonesPlay();
+			
+			deshabilitaBotonesLibrary();
 		}
 		
 			
 		
 	}
 	
+	private void deshabilitaBotonesLibrary() {
+		// TODO Auto-generated method stub
+		btnAdd.setEnabled(false);
+		btnDelete.setEnabled(false);
+		btnClearLibrary.setEnabled(false);
+	}
+
 	private JButton getBtnClearLibrary() {
 		if (btnClearLibrary == null) {
 			btnClearLibrary = new JButton("Clear");
@@ -462,6 +472,8 @@ public class MainWindow extends JFrame {
 		modeloListPlay.removeAllElements();
 		
 		deshabilitaBotonesPlay();
+		
+		deshabilitaBotonesLibrary();
 	}
 	
 	private void deshabilitaBotonesPlay() {
@@ -546,10 +558,21 @@ public class MainWindow extends JFrame {
 	private JButton getBtnPause() {
 		if (btnPause == null) {
 			btnPause = new JButton("■");
+			btnPause.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					stopMusic();
+				}
+			});
 			btnPause.setEnabled(false);
 		}
 		return btnPause;
 	}
+	protected void stopMusic() {
+		// TODO Auto-generated method stub
+		mPlayer.stop();
+		
+	}
+
 	private JButton getBtnNext() {
 		if (btnNext == null) {
 			btnNext = new JButton("►►");
@@ -576,10 +599,39 @@ public class MainWindow extends JFrame {
 	private JButton getBtnDel() {
 		if (btnDel == null) {
 			btnDel = new JButton("Delete");
+			btnDel.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					deletePlay();
+				}
+			});
 			btnDel.setEnabled(false);
 		}
 		return btnDel;
 	}
+	protected void deletePlay() {
+		// TODO Auto-generated method stub
+		for(int i=0; i<listMusic.getSelectedValuesList().size();i++) {
+			
+				
+			MyFile file=listMusic.getSelectedValue();
+				
+			if(file!=null) {
+			if(file.equals(listLibrary.getSelectedValuesList().get(i)))
+				mPlayer.stop();
+			}
+				
+			modeloListPlay.removeElement(listLibrary.getSelectedValuesList().get(i));
+				
+			
+			
+		}
+		if(modeloListPlay.size()==0) {
+			deshabilitaBotonesPlay();
+			
+		}
+		
+	}
+
 	private JButton getBtnClearList() {
 		if (btnClearList == null) {
 			btnClearList = new JButton("Clear");
