@@ -37,6 +37,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.List;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class MainWindow extends JFrame {
 
@@ -85,7 +87,16 @@ public class MainWindow extends JFrame {
 	 * Create the frame.
 	 */
 	public MainWindow(MusicPlayer mP) {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				exit();
+			}
+		});
 		this.mPlayer=mP;
+		mPlayer.setOnSongEnd(() -> {
+		    nextSong();   // avanzar automáticamente
+		});
 		setTitle("Music Player");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(MainWindow.class.getResource("/img/logoTitulo.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -171,13 +182,20 @@ public class MainWindow extends JFrame {
 			mntmExit = new JMenuItem("Exit");
 			mntmExit.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					int response=JOptionPane.showConfirmDialog(null, "Do you want to close the application?");
-					if(response==JOptionPane.YES_OPTION)
-						System.exit(0);
+					exit();
 				}
 			});
 		}
 		return mntmExit;
+	}
+	
+	private void exit() {
+		int response=JOptionPane.showConfirmDialog(null, "Do you want to close the application?");
+		if(response==JOptionPane.YES_OPTION) {
+			clearLibraryList();
+			System.exit(0);
+		}
+			
 	}
 	private JSeparator getSeparator() {
 		if (separator == null) {
@@ -201,6 +219,8 @@ public class MainWindow extends JFrame {
 	
 	private void playMusic() {
 		// TODO Auto-generated method stub
+		
+		
 		MyFile file=listMusic.getSelectedValue();
 		if(file!=null) {
 			mPlayer.play(file.getMyFile());
@@ -215,6 +235,8 @@ public class MainWindow extends JFrame {
 			listMusic.setSelectedIndex(0);
 		else
 			listMusic.setSelectedIndex(listMusic.getSelectedIndex());
+		
+		
 	}
 	
 	private JPanel getPanelNorth() {
@@ -380,10 +402,10 @@ public class MainWindow extends JFrame {
 	
 	private void addPlayList() {
 		List<MyFile> selected=listLibrary.getSelectedValuesList();
-		if(selected.size()>0) {
-			for(int i=0;i<selected.size();i++)
-				if(!modeloListPlay.contains(modeloListLibrary.get(i)))
-					modeloListPlay.add(i, modeloListLibrary.get(i));
+		 if(!selected.isEmpty()) {
+		        for(MyFile file : selected)
+		            if(!modeloListPlay.contains(file))
+		                modeloListPlay.addElement(file);
 		
 			btnPlay.setEnabled(true);
 			btnPrevious.setEnabled(true);
@@ -412,21 +434,21 @@ public class MainWindow extends JFrame {
 	
 	private void deleteLibraryList() {
 		// TODO Auto-generated method stub
-		for(int i=0; i<listLibrary.getSelectedValuesList().size();i++) {
-			
-			if(modeloListPlay.contains(listLibrary.getSelectedValuesList().get(i))){
-				
-				MyFile file=listMusic.getSelectedValue();
-				
-				if(file!=null) {
-				if(file.equals(listLibrary.getSelectedValuesList().get(i)))
-					mPlayer.stop();
-				}
-				
-				modeloListPlay.removeElement(listLibrary.getSelectedValuesList().get(i));
-				
-			}
-			modeloListLibrary.removeElement(listLibrary.getSelectedValuesList().get(i));
+		List<MyFile> selected = listLibrary.getSelectedValuesList();
+
+	    for (MyFile file : selected) {
+
+	        // Si está en playlist también se borra
+	        if (modeloListPlay.contains(file)) {
+
+	            if (song != null && song.equals(file))
+	                mPlayer.stop();
+
+	            modeloListPlay.removeElement(file);
+	        }
+
+	        modeloListLibrary.removeElement(file);
+	    
 		}
 		if(modeloListLibrary.size()==0) {
 			
@@ -461,8 +483,12 @@ public class MainWindow extends JFrame {
 	
 	protected void clearLibraryList() {
 		// TODO Auto-generated method stub
-			modeloListLibrary.removeAllElements();
-			clearPlay();
+		if (song != null)
+	        mPlayer.stop();
+
+	    modeloListLibrary.removeAllElements();
+	    modeloListPlay.removeAllElements();
+		clearPlay();
 			
 		
 	}
@@ -595,6 +621,7 @@ public class MainWindow extends JFrame {
 		listMusic.setSelectedIndex(index);
 		mPlayer.play(modeloListPlay.get(index).getMyFile());
 	}
+	
 
 	private JButton getBtnDel() {
 		if (btnDel == null) {
@@ -610,19 +637,16 @@ public class MainWindow extends JFrame {
 	}
 	protected void deletePlay() {
 		// TODO Auto-generated method stub
-		for(int i=0; i<listMusic.getSelectedValuesList().size();i++) {
-			
-				
-			MyFile file=listMusic.getSelectedValue();
-				
-			if(file!=null) {
-			if(file.equals(listLibrary.getSelectedValuesList().get(i)))
-				mPlayer.stop();
-			}
-				
-			modeloListPlay.removeElement(listLibrary.getSelectedValuesList().get(i));
-				
-			
+		List<MyFile> selected = listMusic.getSelectedValuesList();
+
+	    for (MyFile file : selected) {
+
+	        // Si se está reproduciendo una canción que se va a borrar
+	        if (song != null && song.equals(file)) {
+	            mPlayer.stop();
+	        }
+
+	        modeloListPlay.removeElement(file);
 			
 		}
 		if(modeloListPlay.size()==0) {
