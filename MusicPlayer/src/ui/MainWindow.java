@@ -84,6 +84,9 @@ public class MainWindow extends JFrame {
 	private DefaultListModel<MyFile> modeloListPlay;
 	private MyFile song;
 	private JMenuItem mntmMaxVolumen;
+	private JMenuItem mntmSilence;
+	private JSeparator separator_1;
+	private JSeparator separator_2;
 
 	/**
 	 * Create the frame.
@@ -135,7 +138,10 @@ public class MainWindow extends JFrame {
 		if (mnPlay == null) {
 			mnPlay = new JMenu("Play");
 			mnPlay.add(getMntmPlay());
+			mnPlay.add(getSeparator_1());
 			mnPlay.add(getMntmMaxVolumen());
+			mnPlay.add(getSeparator_2());
+			mnPlay.add(getMntmSilence());
 		}
 		return mnPlay;
 	}
@@ -683,5 +689,30 @@ public class MainWindow extends JFrame {
 			});
 		}
 		return mntmMaxVolumen;
+	}
+	private JMenuItem getMntmSilence() {
+		if (mntmSilence == null) {
+			mntmSilence = new JMenuItem("Silence");
+			mntmSilence.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					getLblVolumen().setText(String.valueOf(0));
+					setVolumen(0);
+					getSliderVolumen().setValue(0);
+				}
+			});
+		}
+		return mntmSilence;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+		}
+		return separator_1;
+	}
+	private JSeparator getSeparator_2() {
+		if (separator_2 == null) {
+			separator_2 = new JSeparator();
+		}
+		return separator_2;
 	}
 }
