@@ -39,6 +39,7 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.JRadioButtonMenuItem;
 
 public class MainWindow extends JFrame {
 
@@ -82,6 +83,7 @@ public class MainWindow extends JFrame {
 	private DefaultListModel<MyFile> modeloListLibrary;
 	private DefaultListModel<MyFile> modeloListPlay;
 	private MyFile song;
+	private JMenuItem mntmMaxVolumen;
 
 	/**
 	 * Create the frame.
@@ -133,6 +135,7 @@ public class MainWindow extends JFrame {
 		if (mnPlay == null) {
 			mnPlay = new JMenu("Play");
 			mnPlay.add(getMntmPlay());
+			mnPlay.add(getMntmMaxVolumen());
 		}
 		return mnPlay;
 	}
@@ -667,5 +670,18 @@ public class MainWindow extends JFrame {
 			btnClearList.setEnabled(false);
 		}
 		return btnClearList;
+	}
+	private JMenuItem getMntmMaxVolumen() {
+		if (mntmMaxVolumen == null) {
+			mntmMaxVolumen = new JMenuItem("Max Volumen");
+			mntmMaxVolumen.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					getLblVolumen().setText(String.valueOf(100));
+					setVolumen(100);
+					getSliderVolumen().setValue(100);
+				}
+			});
+		}
+		return mntmMaxVolumen;
 	}
 }
