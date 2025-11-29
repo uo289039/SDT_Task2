@@ -70,7 +70,7 @@ public class MainWindow extends JFrame {
 	private JButton btnDelete;
 	private JButton btnClearLibrary;
 	private JScrollPane scrollPaneLIst;
-	private JList<MyFile> listMusic;
+	private JList<MyFile> listPlay;
 	private JPanel panelBtnLIst;
 	private JButton btnPrevious;
 	private JButton btnPlay;
@@ -221,7 +221,7 @@ public class MainWindow extends JFrame {
 		// TODO Auto-generated method stub
 		
 		
-		MyFile file=listMusic.getSelectedValue();
+		MyFile file=listPlay.getSelectedValue();
 		if(file!=null) {
 			mPlayer.play(file.getMyFile());
 			song=file;
@@ -231,10 +231,10 @@ public class MainWindow extends JFrame {
 			mPlayer.play(file.getMyFile());
 			song=file;
 		}
-		if(listMusic.getSelectedIndex()<0)
-			listMusic.setSelectedIndex(0);
+		if(listPlay.getSelectedIndex()<0)
+			listPlay.setSelectedIndex(0);
 		else
-			listMusic.setSelectedIndex(listMusic.getSelectedIndex());
+			listPlay.setSelectedIndex(listPlay.getSelectedIndex());
 		
 		
 	}
@@ -516,18 +516,18 @@ public class MainWindow extends JFrame {
 			scrollPaneLIst = new JScrollPane();
 			scrollPaneLIst.setBorder(new LineBorder(Color.RED, 5, true));
 			scrollPaneLIst.setBackground(Color.BLACK);
-			scrollPaneLIst.setViewportView(getListMusic());
+			scrollPaneLIst.setViewportView(getListPlay());
 		}
 		return scrollPaneLIst;
 	}
-	private JList<MyFile> getListMusic() {
-		if (listMusic == null) {
+	private JList<MyFile> getListPlay() {
+		if (listPlay == null) {
 			modeloListPlay=new DefaultListModel<MyFile>();
-			listMusic = new JList<MyFile>(modeloListPlay);
-			listMusic.setForeground(Color.WHITE);
-			listMusic.setBackground(Color.BLACK);
+			listPlay = new JList<MyFile>(modeloListPlay);
+			listPlay.setForeground(Color.WHITE);
+			listPlay.setBackground(Color.BLACK);
 		}
-		return listMusic;
+		return listPlay;
 	}
 	private JPanel getPanelBtnLIst() {
 		if (panelBtnLIst == null) {
@@ -556,12 +556,12 @@ public class MainWindow extends JFrame {
 	}
 	protected void previousSong() {
 		// TODO Auto-generated method stub
-		int index=listMusic.getSelectedIndex();
+		int index=listPlay.getSelectedIndex();
 		--index;
 		if(index<0)
 			index=modeloListPlay.getSize()-1;
 		
-		listMusic.setSelectedIndex(index);
+		listPlay.setSelectedIndex(index);
 		mPlayer.play(modeloListPlay.get(index).getMyFile());
 			
 		
@@ -613,12 +613,12 @@ public class MainWindow extends JFrame {
 	}
 	protected void nextSong() {
 		// TODO Auto-generated method stub
-		int index=listMusic.getSelectedIndex();
+		int index=listPlay.getSelectedIndex();
 		index++;
 		if(index>=modeloListPlay.getSize())
 			index=0;
 		
-		listMusic.setSelectedIndex(index);
+		listPlay.setSelectedIndex(index);
 		mPlayer.play(modeloListPlay.get(index).getMyFile());
 	}
 	
@@ -637,7 +637,7 @@ public class MainWindow extends JFrame {
 	}
 	protected void deletePlay() {
 		// TODO Auto-generated method stub
-		List<MyFile> selected = listMusic.getSelectedValuesList();
+		List<MyFile> selected = listPlay.getSelectedValuesList();
 
 	    for (MyFile file : selected) {
 
