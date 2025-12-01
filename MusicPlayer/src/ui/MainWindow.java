@@ -697,6 +697,8 @@ public class MainWindow extends JFrame {
 				public void actionPerformed(ActionEvent e) {
 					getLblVolumen().setText(String.valueOf(0));
 					System.out.println("Silence");
+					System.out.println();	
+					System.out.println("Shut up!!!!");
 					setVolumen(0);
 					getSliderVolumen().setValue(0);
 				}
