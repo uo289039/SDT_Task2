@@ -11,7 +11,7 @@ private BasicPlayer basicPlayer = null;
 	
 	private double volumen;
 	
-	private double maximo;
+	private double maximum;
 	private Runnable onSongEnd;
 	
 	public MusicPlayer(){
@@ -22,11 +22,11 @@ private BasicPlayer basicPlayer = null;
 	public void play (File file){
 		try {
 			setVolumen(volumen);
-			setMaximo(maximo);
+			setMaximum(maximo);
 			basicPlayer.open(file);
 			basicPlayer.play();
 			setVolumen(volumen);
-			setMaximo(maximo);
+			setMaximum(maximo);
 		}
 		catch (Exception e){	
 			
@@ -47,7 +47,7 @@ private BasicPlayer basicPlayer = null;
 		}
 	}
 	
-	private void setMaximo(double maximo2) {
+	private void setMaximum(double maximo2) {
 		this.maximo=maximo2;
 		
 	}
@@ -61,7 +61,7 @@ private BasicPlayer basicPlayer = null;
 			
 			basicPlayer.setGain(vol/volMax);
 			setVolumen(vol);
-			setMaximo(volMax);
+			setMaximum(volMax);
 			
 		}
 		catch (BasicPlayerException e){
@@ -73,7 +73,7 @@ private BasicPlayer basicPlayer = null;
 		return volumen;
 	}
 
-	public double getMaximo() {
+	public double getMaximum() {
 		return maximo;
 	}
 
